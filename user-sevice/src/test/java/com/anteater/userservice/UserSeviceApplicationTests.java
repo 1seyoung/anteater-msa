@@ -1,4 +1,4 @@
-package com.anteater.usersevice;
+package com.anteater.userservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
