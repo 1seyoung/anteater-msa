@@ -1,12 +1,11 @@
 package com.anteater.userservice.controller;
 
-import com.anteater.userservice.dto.LoginRequestDTO;
-import com.anteater.userservice.dto.LoginResponseDTO;
-import com.anteater.userservice.dto.PasswordResetConfirmDTO;
-import com.anteater.userservice.dto.PasswordResetDTO;
+import com.anteater.userservice.dto.*;
 import com.anteater.userservice.entity.User;
 import com.anteater.userservice.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,37 +17,70 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        // TODO: Implement email verification
-        userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDTO) {
+        try {
+            userService.registerUser(registrationDTO);
+            return ResponseEntity.ok("User registered successfully. Please check your email for verification.");
+        } catch (UserServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        LoginResponseDTO response = userService.login(loginRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
+        try {
+            LoginResponseDTO response = userService.login(loginRequest);
+            return ResponseEntity.ok(response);
+        } catch (UserServiceException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
-        userService.logout(token);
-        return ResponseEntity.ok("Logged out successfully");
+        try {
+            userService.logout(token);
+            return ResponseEntity.ok("Logged out successfully");
+        } catch (UserServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetDTO passwordResetDTO) {
-        userService.resetPassword(passwordResetDTO);
-        return ResponseEntity.ok("Password reset instructions sent");
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetDTO passwordResetDTO) {
+        try {
+            userService.resetPassword(passwordResetDTO.getEmail());
+            return ResponseEntity.ok("Password reset instructions sent to your email");
+        } catch (UserServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/reset-password/confirm")
-    public ResponseEntity<?> confirmResetPassword(@RequestBody PasswordResetConfirmDTO confirmDTO) {
-        userService.confirmResetPassword(confirmDTO);
-        return ResponseEntity.ok("Password reset successful");
+    public ResponseEntity<?> confirmResetPassword(@Valid @RequestBody PasswordResetConfirmDTO confirmDTO) {
+        try {
+            userService.confirmResetPassword(confirmDTO.getToken(), confirmDTO.getNewPassword());
+            return ResponseEntity.ok("Password reset successful");
+        } catch (UserServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyUser(@RequestParam String token) {
+        try {
+            userService.verifyUser(token);
+            return ResponseEntity.ok("Email verification completed successfully");
+        } catch (UserServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

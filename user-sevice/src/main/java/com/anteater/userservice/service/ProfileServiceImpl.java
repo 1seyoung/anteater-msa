@@ -20,24 +20,27 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public User getProfile(String username) {
-        return userRepository.findByEmail(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
     @Transactional
     public void updateProfile(String username, UpdateProfileDTO updateProfileDTO) {
-        User user = userRepository.findByEmail(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (updateProfileDTO.getName() != null) {
-            user.setName(updateProfileDTO.getName());
+        if (updateProfileDTO.getUsername() != null) {
+            user.setUsername(updateProfileDTO.getUsername());
+        }
+        if (updateProfileDTO.getEmail() != null) {
+            user.setEmail(updateProfileDTO.getEmail());
         }
         if (updateProfileDTO.getProfileImage() != null) {
             user.setProfileImage(updateProfileDTO.getProfileImage());
         }
-        if (updateProfileDTO.getGreeting() != null) {
-            user.setGreeting(updateProfileDTO.getGreeting());
+        if (updateProfileDTO.getBio() != null) {
+            user.setBio(updateProfileDTO.getBio());
         }
 
         userRepository.save(user);
@@ -46,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public void updatePassword(String username, UpdatePasswordDTO updatePasswordDTO) {
-        User user = userRepository.findByEmail(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(updatePasswordDTO.getCurrentPassword(), user.getPassword())) {
