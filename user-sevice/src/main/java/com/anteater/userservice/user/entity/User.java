@@ -1,4 +1,4 @@
-package com.anteater.userservice.entity;
+package com.anteater.userservice.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,15 +1,12 @@
-package com.anteater.userservice.controller;
+package com.anteater.userservice.profile.controller;
 
 import com.anteater.userservice.dto.UpdatePasswordDTO;
 import com.anteater.userservice.dto.UpdateProfileDTO;
-import com.anteater.userservice.entity.User;
-import com.anteater.userservice.service.ProfileService;
-import com.anteater.userservice.service.UserService;
+import com.anteater.userservice.user.entity.User;
+import com.anteater.userservice.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 

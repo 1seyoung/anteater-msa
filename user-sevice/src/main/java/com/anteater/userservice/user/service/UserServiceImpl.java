@@ -1,8 +1,9 @@
-package com.anteater.userservice.service;
+package com.anteater.userservice.user.service;
 
 import com.anteater.userservice.dto.LoginRequestDTO;
 import com.anteater.userservice.dto.LoginResponseDTO;
-import com.anteater.userservice.entity.User;
+import com.anteater.userservice.service.EmailService;
+import com.anteater.userservice.user.entity.User;
 import com.anteater.userservice.repository.UserRepository;
 import com.anteater.userservice.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;

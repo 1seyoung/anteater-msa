@@ -1,8 +1,8 @@
-package com.anteater.userservice.service;
+package com.anteater.userservice.profile.service;
 
 import com.anteater.userservice.dto.UpdatePasswordDTO;
 import com.anteater.userservice.dto.UpdateProfileDTO;
-import com.anteater.userservice.entity.User;
+import com.anteater.userservice.user.entity.User;
 import com.anteater.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
