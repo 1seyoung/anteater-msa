@@ -28,6 +28,7 @@ public class ProfileController { //public class -> 외부 접근 가능, 스프�
 
     @Autowired
     public ProfileController(ProfileService profileService) {
+
         this.profileService = profileService;
     }
 

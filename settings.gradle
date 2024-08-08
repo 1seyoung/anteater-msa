@@ -1,1 +1,3 @@
 rootProject.name = 'stocktalk'
+
+include 'user-service', 'stock-service', 'newsfeed-service', 'activity-service', 'api-gateway'
